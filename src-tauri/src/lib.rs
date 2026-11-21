@@ -8,6 +8,7 @@ mod auto_launch;
 mod claude_desktop_config;
 mod claude_mcp;
 mod claude_plugin;
+mod codebuddy_cn_config;
 mod codex_config;
 mod codex_history_migration;
 mod codex_rollout_file;
@@ -48,6 +49,8 @@ mod prompt;
 mod prompt_files;
 mod provider;
 mod provider_kind;
+mod qoder_cn_config;
+mod qoder_config;
 mod proxy;
 mod services;
 mod session_manager;
@@ -469,6 +472,29 @@ fn handle_second_instance(app: &tauri::AppHandle, args: Vec<String>) {
     }
 }
 
+/// dev 构建在 Dock 图标右下角叠加 `DEV` 角标（`icons/icon-dev.png`），
+/// 便于和已安装的正式版区分。仅 macOS + debug 生效。
+#[cfg(all(target_os = "macos", debug_assertions))]
+fn apply_dev_dock_icon() {
+    use objc2_06::{AnyThread, MainThreadMarker};
+    use objc2_app_kit_03::{NSApplication, NSImage};
+    use objc2_foundation_03::NSString;
+
+    let Some(mtm) = MainThreadMarker::new() else {
+        eprintln!("[dev] dock icon: not on main thread, skip");
+        return;
+    };
+    let path = concat!(env!("CARGO_MANIFEST_DIR"), "/icons/icon-dev.png");
+    let file = NSString::from_str(path);
+    let Some(image) = NSImage::initWithContentsOfFile(NSImage::alloc(), &file) else {
+        eprintln!("[dev] dock icon: failed to load {path}");
+        return;
+    };
+    let app = NSApplication::sharedApplication(mtm);
+    unsafe { app.setApplicationIconImage(Some(&image)) };
+    eprintln!("[dev] dock icon applied: {path}");
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     // 设置 panic hook，在应用崩溃时记录日志到 <app_config_dir>/crash.log（默认 ~/.cc-switch/crash.log）
@@ -581,6 +607,9 @@ pub fn run() {
         )
         .setup(|app| {
             let _ = rustls::crypto::ring::default_provider().install_default();
+
+            #[cfg(all(target_os = "macos", debug_assertions))]
+            apply_dev_dock_icon();
 
             // 预先刷新 Store 覆盖配置，确保后续路径读取正确（日志/数据库等）
             app_store::refresh_app_config_dir_override(app.handle());

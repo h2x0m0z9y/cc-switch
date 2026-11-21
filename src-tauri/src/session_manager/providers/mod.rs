@@ -15,7 +15,11 @@ pub mod pi;
 mod pi_blocks;
 pub(crate) mod utils;
 
+pub mod codebuddy_cn;
 pub mod dsh;
 pub mod kimi;
 pub mod mcode;
+pub mod qoder;
+pub mod qoder_cn;
+pub(crate) mod qoder_format;
 pub mod workbuddy;

@@ -48,7 +48,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { HoverTip } from "@/components/ui/hover-tip";
 import { AppPageHeader } from "@/components/shell/AppPageHeader";
-import { AppGlyph, APP_DISPLAY_NAME } from "@/components/shell/AppGlyph";
+import { SessionAppGlyph } from "./SessionAppGlyph";
 import { extractErrorMessage } from "@/utils/errorUtils";
 import { isMac } from "@/lib/platform";
 import { SearchField } from "@/components/ui/search-field";
@@ -67,7 +67,9 @@ import {
   getSessionKey,
   groupSessionsByProject,
   groupSessionsByTime,
+  isAppId,
   isSessionAppId,
+  SESSION_APP_DISPLAY_NAME,
   SESSION_APP_IDS,
   SESSION_SOURCE_PATHS,
   shortenHomePath,
@@ -221,13 +223,16 @@ export function SessionManagerPage({
   // DeepSeek Harness（Web 与 Desktop 共用会话目录，合并成一项）在 Desktop 显示时也算
   const availableApps = useMemo(() => {
     const visible = { ...DEFAULT_VISIBLE_APPS, ...settings?.visibleApps };
+    const providersWithSessions = new Set(sessions.map((s) => s.providerId));
     return SESSION_APP_IDS.filter(
       (app) =>
-        visible[app] ||
-        (app === "claude" && visible["claude-desktop"]) ||
-        app === appFilter,
+        // 仅会话来源没有侧栏显隐开关：有会话才列出，避免空来源占位
+        (isAppId(app)
+          ? visible[app] ||
+            (app === "claude" && visible["claude-desktop"])
+          : providersWithSessions.has(app)) || app === appFilter,
     );
-  }, [settings?.visibleApps, appFilter]);
+  }, [settings?.visibleApps, appFilter, sessions]);
 
   const scopedSessions = useMemo(
     () =>
@@ -725,7 +730,7 @@ export function SessionManagerPage({
   };
 
   const appName = (app: string) =>
-    isSessionAppId(app) ? APP_DISPLAY_NAME[app] : app;
+    isSessionAppId(app) ? SESSION_APP_DISPLAY_NAME[app] : app;
   const showAppIcon = appFilter === "all";
   const totalCount = scopedSessions.length;
   const currentCount =
@@ -1237,7 +1242,7 @@ export function SessionManagerPage({
                       strokeWidth={2}
                     />
                   ) : (
-                    <AppGlyph
+                    <SessionAppGlyph
                       app={appFilter}
                       size={16}
                       badgeClassName="bg-surface"
@@ -1292,14 +1297,14 @@ export function SessionManagerPage({
                       pressed={appFilter === app}
                       dimmed={count === 0}
                       icon={
-                        <AppGlyph
+                        <SessionAppGlyph
                           app={app}
                           size={16}
                           badgeClassName="bg-popover"
                           className={count === 0 ? "opacity-60" : undefined}
                         />
                       }
-                      label={APP_DISPLAY_NAME[app]}
+                      label={SESSION_APP_DISPLAY_NAME[app]}
                       count={count ? String(count) : noSessionsLabel}
                       onSelect={() => setAppFilter(app)}
                     />

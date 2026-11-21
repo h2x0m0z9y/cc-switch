@@ -1,12 +1,20 @@
 import type { ReactNode } from "react";
 import { createElement } from "react";
 import type { AppId } from "@/lib/api";
+import { APP_DISPLAY_NAME } from "@/components/shell/AppGlyph";
 import { isWindows } from "@/lib/platform";
 import type { SessionMeta, SessionTextRange } from "@/types";
 
 export const UNKNOWN_PROJECT_DIR_KEY = "__unknown_project_dir__";
 
-/** 会话来源：10 个应用（Claude Desktop 没有自己的会话记录，用 Claude Code 的）。 */
+/** 仅会话来源：不是完整应用（不在侧栏），只被会话管理器扫描和展示。 */
+export const SESSION_ONLY_APP_IDS = [
+  "codebuddy-cn",
+  "qoder",
+  "qoder-cn",
+] as const;
+
+/** 会话来源（Claude Desktop 没有自己的会话记录，用 Claude Code 的）。 */
 export const SESSION_APP_IDS = [
   "claude",
   "codex",
@@ -23,12 +31,26 @@ export const SESSION_APP_IDS = [
   "agy",
   "copilot",
   "workbuddy",
-] as const satisfies readonly AppId[];
+  ...SESSION_ONLY_APP_IDS,
+] as const;
 
 export type SessionAppId = (typeof SESSION_APP_IDS)[number];
+export type SessionOnlyAppId = (typeof SESSION_ONLY_APP_IDS)[number];
 
 export const isSessionAppId = (value: string): value is SessionAppId =>
   (SESSION_APP_IDS as readonly string[]).includes(value);
+
+/** 完整的 `AppId`（有侧栏应用和图标）；仅会话来源不在其中。 */
+export const isAppId = (value: string): value is AppId =>
+  Object.prototype.hasOwnProperty.call(APP_DISPLAY_NAME, value);
+
+/** 会话来源的展示名：完整应用取应用名，仅会话来源用这里的固定名称。 */
+export const SESSION_APP_DISPLAY_NAME: Record<SessionAppId, string> = {
+  ...APP_DISPLAY_NAME,
+  "codebuddy-cn": "CodeBuddy CN",
+  qoder: "Qoder",
+  "qoder-cn": "Qoder CN",
+};
 
 /** 「会话记录在哪里」对话框：各来源的默认位置（改过配置目录的按改过的读）。 */
 export const SESSION_SOURCE_PATHS: Record<SessionAppId, string[]> = {
@@ -45,6 +67,9 @@ export const SESSION_SOURCE_PATHS: Record<SessionAppId, string[]> = {
   kimi: ["~/.kimi-code/sessions"],
   dsh: ["~/.dsh/sessions/<project>/<session>/session.v*.jsonl[.zstd]"],
   workbuddy: ["~/.workbuddy/projects"],
+  "codebuddy-cn": ["~/Library/Application Support/CodeBuddy CN/codebuddy-sessions.vscdb"],
+  qoder: ["~/Library/Application Support/Qoder/SharedClientCache/cache/db/local.db"],
+  "qoder-cn": ["~/Library/Application Support/QoderCN/SharedClientCache/cache/db/local.db"],
   agy: [
     "~/.gemini/antigravity-cli/brain/<conversation>/.system_generated/logs",
     "~/.gemini/antigravity/brain/<conversation>/.system_generated/logs",
@@ -58,6 +83,9 @@ const NATIVE_DELETE_HINT_KEYS: Record<string, string> = {
   dsh: "dsh.deleteSessionHint",
   copilot: "sessionManager.copilotDeleteHint",
   workbuddy: "workbuddy.deleteSessionHint",
+  "codebuddy-cn": "sessionManager.codebuddyCnDeleteHint",
+  qoder: "sessionManager.qoderDeleteHint",
+  "qoder-cn": "sessionManager.qoderCnDeleteHint",
 };
 
 /** Antigravity 只有 CLI 的会话能在这里删（后端连索引一起清）；IDE 的会话

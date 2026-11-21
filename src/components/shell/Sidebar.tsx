@@ -145,12 +145,7 @@ function SidebarTopBar({
           {...DRAG_REGION_ATTR}
           style={DRAG_REGION_STYLE as React.CSSProperties}
         >
-          <img
-            src={ccswitchLogo}
-            alt=""
-            draggable={false}
-            className="pointer-events-none h-5 w-5 shrink-0"
-          />
+          <BrandLogo size={20} />
           <span className="pointer-events-none me-auto min-w-0 truncate text-strong font-semibold text-fg-1">
             CC Switch
           </span>
@@ -190,12 +185,7 @@ function SidebarTopBar({
         // 左上角品牌（Windows / Linux）：图标 + 名字。macOS 左上角留给红绿灯，不放。
         // 图片不接收指针事件，拖它也是在拖窗口
         <span className="pointer-events-none me-auto flex min-w-0 items-center gap-2 ps-1.5">
-          <img
-            src={ccswitchLogo}
-            alt=""
-            draggable={false}
-            className="h-[22px] w-[22px] shrink-0"
-          />
+          <BrandLogo size={22} />
           <span className="truncate text-strong font-semibold text-fg-1">
             CC Switch
           </span>
@@ -207,6 +197,26 @@ function SidebarTopBar({
 }
 
 // ─── 主目录 ────────────────────────────────────────────────────────────────
+
+/** 品牌图标；开发模式（Vite dev）在右下角加一个 DEV 角标，便于和正式版区分。 */
+function BrandLogo({ size }: { size: number }) {
+  return (
+    <span className="relative inline-flex shrink-0">
+      <img
+        src={ccswitchLogo}
+        alt=""
+        draggable={false}
+        className="pointer-events-none"
+        style={{ width: size, height: size }}
+      />
+      {import.meta.env.DEV && (
+        <span className="pointer-events-none absolute -bottom-1 -right-1 rounded-[3px] bg-warning px-[3px] py-[1px] text-[8px] font-bold leading-none text-white">
+          DEV
+        </span>
+      )}
+    </span>
+  );
+}
 
 function MainDirectory({
   collapsed,

@@ -18,8 +18,8 @@ use std::time::{Duration, Instant};
 // 其余模型类型从 `session_manager::model` 引用
 pub use model::SessionMessage;
 use providers::{
-    agy, claude, codex, copilot, dsh, gemini, grokbuild, hermes, kimi, mcode, omp, openclaw,
-    opencode, pi, workbuddy,
+    agy, claude, codebuddy_cn, codex, copilot, dsh, gemini, grokbuild, hermes, kimi, mcode, omp,
+    openclaw, opencode, pi, qoder, qoder_cn, workbuddy,
 };
 
 #[derive(Debug, Clone, Serialize)]
@@ -97,7 +97,7 @@ pub(crate) struct SessionScan {
 pub(crate) fn scan_sessions_with_status() -> SessionScan {
     use providers::utils::ScanStatus;
     type Scanner = fn(&mut ScanStatus) -> Vec<SessionMeta>;
-    let scanners: [(&str, Scanner); 15] = [
+    let scanners: [(&str, Scanner); 18] = [
         ("codex", codex::scan_sessions_with_status),
         ("claude", claude::scan_sessions_with_status),
         ("opencode", opencode::scan_sessions_with_status),
@@ -114,6 +114,9 @@ pub(crate) fn scan_sessions_with_status() -> SessionScan {
         ("dsh", |_| dsh::scan_sessions()),
         ("agy", |_| agy::scan_sessions()),
         ("workbuddy", |_| workbuddy::scan_sessions()),
+        ("codebuddy-cn", |_| codebuddy_cn::scan_sessions()),
+        ("qoder", |_| qoder::scan_sessions()),
+        ("qoder-cn", |_| qoder_cn::scan_sessions()),
     ];
     let mut scan = SessionScan {
         sessions: Vec::new(),
@@ -162,6 +165,15 @@ pub fn load_messages(provider_id: &str, source_path: &str) -> Result<Vec<Session
     if provider_id == "hermes" && source_path.starts_with("sqlite:") {
         return hermes::load_messages_sqlite(source_path);
     }
+    if provider_id == "codebuddy-cn" && source_path.starts_with("sqlite:") {
+        return codebuddy_cn::load_messages_sqlite(source_path);
+    }
+    if provider_id == "qoder" && source_path.starts_with("sqlite:") {
+        return qoder::load_messages_sqlite(source_path);
+    }
+    if provider_id == "qoder-cn" && source_path.starts_with("sqlite:") {
+        return qoder_cn::load_messages_sqlite(source_path);
+    }
 
     let path = Path::new(source_path);
     match provider_id {
@@ -179,6 +191,9 @@ pub fn load_messages(provider_id: &str, source_path: &str) -> Result<Vec<Session
         "copilot" => copilot::load_messages(path),
         "dsh" => dsh::load_messages(path),
         "workbuddy" => workbuddy::load_messages(path),
+        "codebuddy-cn" => codebuddy_cn::load_messages(path),
+        "qoder" => qoder::load_messages(path),
+        "qoder-cn" => qoder_cn::load_messages(path),
         _ => Err(format!("Unsupported provider: {provider_id}")),
     }
 }
@@ -251,6 +266,24 @@ fn delete_session_source(
                 .into(),
         );
     }
+    if provider_id == "codebuddy-cn" {
+        // CodeBuddy CN keeps its own session index alongside the jsonl files.
+        return Err(
+            "Delete this session in CodeBuddy CN to keep its session list and history consistent"
+                .into(),
+        );
+    }
+    if provider_id == "qoder" {
+        return Err(
+            "Delete this session in Qoder to keep its session list and history consistent".into(),
+        );
+    }
+    if provider_id == "qoder-cn" {
+        return Err(
+            "Delete this session in Qoder CN to keep its session list and history consistent"
+                .into(),
+        );
+    }
     // SQLite sessions bypass the file-based deletion path
     if provider_id == "opencode" && source_path.starts_with("sqlite:") {
         return opencode::delete_session_sqlite(session_id, source_path);
@@ -311,6 +344,9 @@ fn provider_roots(provider_id: &str) -> Result<Vec<PathBuf>, String> {
         "kimi" => kimi::session_roots(),
         "dsh" => dsh::session_roots(),
         "workbuddy" => workbuddy::session_roots(),
+        "codebuddy-cn" => codebuddy_cn::session_roots(),
+        "qoder" => qoder::session_roots(),
+        "qoder-cn" => qoder_cn::session_roots(),
         "agy" => agy::session_roots(),
         "omp" => omp::session_roots(),
         "copilot" => copilot::session_roots(),

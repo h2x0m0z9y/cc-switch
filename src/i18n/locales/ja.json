@@ -1743,7 +1743,10 @@
       "expandContent": "全文を表示",
       "collapseContent": "折りたたむ"
     },
-    "copilotDeleteHint": "セッションストアの整合性を保つため、このセッションは GitHub Copilot CLI で削除してください"
+    "copilotDeleteHint": "セッションストアの整合性を保つため、このセッションは GitHub Copilot CLI で削除してください",
+    "codebuddyCnDeleteHint": "セッション一覧と履歴の整合性を保つため、このセッションは CodeBuddy CN で削除してください",
+    "qoderDeleteHint": "セッション一覧と履歴の整合性を保つため、このセッションは Qoder で削除してください",
+    "qoderCnDeleteHint": "セッション一覧と履歴の整合性を保つため、このセッションは Qoder CN で削除してください"
   },
   "console": {
     "openLinkFailed": "リンクを開けませんでした:",

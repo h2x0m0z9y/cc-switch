@@ -1743,7 +1743,10 @@
       "expandContent": "Show full content",
       "collapseContent": "Collapse"
     },
-    "copilotDeleteHint": "Delete this session in GitHub Copilot CLI so its session store stays consistent"
+    "copilotDeleteHint": "Delete this session in GitHub Copilot CLI so its session store stays consistent",
+    "codebuddyCnDeleteHint": "Delete this session in CodeBuddy CN to keep its session list and history consistent",
+    "qoderDeleteHint": "Delete this session in Qoder to keep its session list and history consistent",
+    "qoderCnDeleteHint": "Delete this session in Qoder CN to keep its session list and history consistent"
   },
   "console": {
     "openLinkFailed": "Failed to open link:",

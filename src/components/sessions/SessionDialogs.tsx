@@ -6,14 +6,14 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { AppGlyph, APP_DISPLAY_NAME } from "@/components/shell/AppGlyph";
+import { SessionAppGlyph } from "./SessionAppGlyph";
 import type { SessionMeta } from "@/types";
 import {
   formatSessionTitle,
   isSessionAppId,
+  SESSION_APP_DISPLAY_NAME,
   SESSION_APP_IDS,
   SESSION_SOURCE_PATHS,
-  type SessionAppId,
 } from "./utils";
 
 const dialogClass =
@@ -47,7 +47,7 @@ export function SessionDeleteDialog({
   ];
 
   const consequence = (app: string) => {
-    const name = isSessionAppId(app) ? APP_DISPLAY_NAME[app] : app;
+    const name = isSessionAppId(app) ? SESSION_APP_DISPLAY_NAME[app] : app;
     switch (app) {
       case "claude":
         return t("sessionManager.consequenceClaude", {
@@ -105,13 +105,13 @@ export function SessionDeleteDialog({
           <ul className="m-0 flex list-none flex-col gap-2.5 rounded-panel bg-subtle px-3.5 py-3">
             {apps.map((app) => {
               const name = isSessionAppId(app)
-                ? APP_DISPLAY_NAME[app as SessionAppId]
+                ? SESSION_APP_DISPLAY_NAME[app]
                 : app;
               return (
                 <li key={app} className="flex items-start gap-2.5 text-caption">
                   <span className="flex h-[18px] w-4 shrink-0 items-center">
                     {isSessionAppId(app) && (
-                      <AppGlyph
+                      <SessionAppGlyph
                         app={app}
                         size={14}
                         badgeClassName="bg-subtle"
@@ -202,10 +202,10 @@ export function SessionSourcesDialog({
             {SESSION_APP_IDS.map((app) => (
               <li key={app} className="flex items-start gap-2.5 text-body">
                 <span className="flex h-5 w-4 shrink-0 items-center">
-                  <AppGlyph app={app} size={14} badgeClassName="bg-surface" />
+                  <SessionAppGlyph app={app} size={14} badgeClassName="bg-surface" />
                 </span>
                 <span className="w-[104px] shrink-0 font-medium text-fg-1">
-                  {APP_DISPLAY_NAME[app]}
+                  {SESSION_APP_DISPLAY_NAME[app]}
                 </span>
                 <span className="flex min-w-0 flex-wrap gap-x-3">
                   {SESSION_SOURCE_PATHS[app].map((path) => (

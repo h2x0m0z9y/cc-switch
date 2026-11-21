@@ -1743,7 +1743,10 @@
       "expandContent": "Vollständigen Inhalt anzeigen",
       "collapseContent": "Einklappen"
     },
-    "copilotDeleteHint": "Löschen Sie diese Sitzung in GitHub Copilot CLI, damit dessen Sitzungsspeicher konsistent bleibt"
+    "copilotDeleteHint": "Löschen Sie diese Sitzung in GitHub Copilot CLI, damit dessen Sitzungsspeicher konsistent bleibt",
+    "codebuddyCnDeleteHint": "Löschen Sie diese Sitzung in CodeBuddy CN, damit Sitzungsliste und Verlauf konsistent bleiben",
+    "qoderDeleteHint": "Löschen Sie diese Sitzung in Qoder, damit Sitzungsliste und Verlauf konsistent bleiben",
+    "qoderCnDeleteHint": "Löschen Sie diese Sitzung in Qoder CN, damit Sitzungsliste und Verlauf konsistent bleiben"
   },
   "console": {
     "openLinkFailed": "Link konnte nicht geöffnet werden:",

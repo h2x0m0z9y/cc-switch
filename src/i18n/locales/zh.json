@@ -1743,7 +1743,10 @@
       "expandContent": "展开完整内容",
       "collapseContent": "收起"
     },
-    "copilotDeleteHint": "请在 GitHub Copilot CLI 中删除此会话，以保持会话存储一致"
+    "copilotDeleteHint": "请在 GitHub Copilot CLI 中删除此会话，以保持会话存储一致",
+    "codebuddyCnDeleteHint": "请在 CodeBuddy CN 中删除此会话，以同时更新它的会话列表和历史记录。",
+    "qoderDeleteHint": "请在 Qoder 中删除此会话，以同时更新它的会话列表和历史记录。",
+    "qoderCnDeleteHint": "请在 Qoder CN 中删除此会话，以同时更新它的会话列表和历史记录。"
   },
   "console": {
     "openLinkFailed": "打开链接失败:",

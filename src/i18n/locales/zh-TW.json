@@ -1743,7 +1743,10 @@
       "expandContent": "展開完整內容",
       "collapseContent": "收合"
     },
-    "copilotDeleteHint": "請在 GitHub Copilot CLI 中刪除此工作階段，以保持工作階段儲存一致"
+    "copilotDeleteHint": "請在 GitHub Copilot CLI 中刪除此工作階段，以保持工作階段儲存一致",
+    "codebuddyCnDeleteHint": "請在 CodeBuddy CN 中刪除此工作階段，以同時更新它的工作階段清單和歷史記錄。",
+    "qoderDeleteHint": "請在 Qoder 中刪除此工作階段，以同時更新它的工作階段清單和歷史記錄。",
+    "qoderCnDeleteHint": "請在 Qoder CN 中刪除此工作階段，以同時更新它的工作階段清單和歷史記錄。"
   },
   "console": {
     "openLinkFailed": "開啟連結失敗：",

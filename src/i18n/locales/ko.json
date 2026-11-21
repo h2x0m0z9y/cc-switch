@@ -1743,6 +1743,9 @@
       "collapseContent": "접기"
     },
     "copilotDeleteHint": "세션 저장소의 일관성을 유지하려면 GitHub Copilot CLI에서 이 세션을 삭제하세요.",
+    "codebuddyCnDeleteHint": "세션 목록과 기록의 일관성을 유지하려면 CodeBuddy CN에서 이 세션을 삭제하세요.",
+    "qoderDeleteHint": "세션 목록과 기록의 일관성을 유지하려면 Qoder에서 이 세션을 삭제하세요.",
+    "qoderCnDeleteHint": "세션 목록과 기록의 일관성을 유지하려면 Qoder CN에서 이 세션을 삭제하세요.",
     "dshMergedNote": "DeepSeek Harness의 Web과 Desktop은 동일한 세션 기록을 공유합니다. 이 기록은 여기에 통합하여 표시됩니다."
   },
   "console": {

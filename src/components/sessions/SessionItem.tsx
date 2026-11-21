@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { HoverTip } from "@/components/ui/hover-tip";
-import { AppGlyph } from "@/components/shell/AppGlyph";
+import { SessionAppGlyph } from "./SessionAppGlyph";
 import { cn } from "@/lib/utils";
 import type { SessionContentHit, SessionMeta } from "@/types";
 import {
@@ -206,7 +206,7 @@ export function SessionItem({
       <div className="pointer-events-none flex min-w-0 flex-1 flex-col">
         <div className="flex min-w-0 items-center gap-2">
           {showAppIcon && appId && (
-            <AppGlyph
+            <SessionAppGlyph
               app={appId}
               size={16}
               badgeClassName="bg-surface group-hover:bg-subtle group-focus-within:bg-subtle"

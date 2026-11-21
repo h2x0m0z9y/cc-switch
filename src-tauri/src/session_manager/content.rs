@@ -101,6 +101,21 @@ pub fn validate_source(provider_id: &str, source_path: &str) -> Result<Validated
             hermes::parse_sqlite_source(source_path),
             &crate::hermes_config::get_hermes_dir().join("state.db"),
         )?,
+        "codebuddy-cn" if source_path.starts_with("sqlite:") => validate_sqlite_source(
+            source_path,
+            super::providers::codebuddy_cn::parse_sqlite_source(source_path),
+            &crate::codebuddy_cn_config::sessions_db(),
+        )?,
+        "qoder" if source_path.starts_with("sqlite:") => validate_sqlite_source(
+            source_path,
+            super::providers::qoder_format::parse_sqlite_source(source_path),
+            &crate::qoder_config::local_db(),
+        )?,
+        "qoder-cn" if source_path.starts_with("sqlite:") => validate_sqlite_source(
+            source_path,
+            super::providers::qoder_format::parse_sqlite_source(source_path),
+            &crate::qoder_cn_config::local_db(),
+        )?,
         _ => {
             let roots = provider_roots(provider_id)?;
             let source = codex_source_or_sibling(provider_id, Path::new(source_path));
@@ -673,6 +688,9 @@ fn project_dir_for(source: &ValidatedSource) -> Option<PathBuf> {
         "omp" => omp::scan_sessions(),
         "dsh" => super::providers::dsh::scan_sessions(),
         "workbuddy" => super::providers::workbuddy::scan_sessions(),
+        "codebuddy-cn" => super::providers::codebuddy_cn::scan_sessions(),
+        "qoder" => super::providers::qoder::scan_sessions(),
+        "qoder-cn" => super::providers::qoder_cn::scan_sessions(),
         "agy" => super::providers::agy::scan_sessions(),
         "copilot" => super::providers::copilot::scan_sessions(),
         _ => return None,

@@ -39,7 +39,7 @@ pub(crate) fn session_roots() -> Vec<PathBuf> {
 }
 
 pub fn scan_sessions() -> Vec<SessionMeta> {
-    scan(&projects_dir())
+    scan(&projects_dir(), "workbuddy", None)
 }
 
 /// 每个项目目录下的顶层 `*.jsonl`（子目录里的子代理记录不是独立会话）。
@@ -101,10 +101,16 @@ pub(crate) fn usage_files(projects: &Path) -> Vec<(PathBuf, Option<String>)> {
     files
 }
 
-fn scan(projects: &Path) -> Vec<SessionMeta> {
+/// 扫描某个 CodeBuddy Code 引擎数据目录下的会话。`provider_id` / `resume_command`
+/// 由调用方决定，CodeBuddy CN、Qoder 等复用同一格式的来源都走这里。
+pub(crate) fn scan(
+    projects: &Path,
+    provider_id: &str,
+    resume_command: Option<String>,
+) -> Vec<SessionMeta> {
     session_files(projects)
         .iter()
-        .filter_map(|path| parse_session(path))
+        .filter_map(|path| parse_session(path, provider_id, resume_command.clone()))
         .collect()
 }
 
@@ -154,7 +160,11 @@ fn user_prompt(record: &Value) -> Option<String> {
     (!text.is_empty()).then_some(text)
 }
 
-fn parse_session(path: &Path) -> Option<SessionMeta> {
+fn parse_session(
+    path: &Path,
+    provider_id: &str,
+    resume_command: Option<String>,
+) -> Option<SessionMeta> {
     let mut session_id = None;
     let mut project_dir = None;
     let mut prompt = None;
@@ -205,7 +215,7 @@ fn parse_session(path: &Path) -> Option<SessionMeta> {
     })?;
     let title = title.unwrap_or_else(|| prompt.lines().next().unwrap_or_default().to_string());
     Some(SessionMeta {
-        provider_id: "workbuddy".into(),
+        provider_id: provider_id.into(),
         session_id,
         title: Some(truncate_summary(&title, TITLE_MAX_CHARS)),
         summary: Some(truncate_summary(&prompt, 200)),
@@ -213,7 +223,7 @@ fn parse_session(path: &Path) -> Option<SessionMeta> {
         created_at,
         last_active_at,
         source_path: Some(path.to_string_lossy().into_owned()),
-        resume_command: None,
+        resume_command,
     })
 }
 
@@ -490,7 +500,7 @@ mod tests {
         fs::write(project.join("empty.jsonl"), SESSION.lines().next().unwrap()).unwrap();
         fs::create_dir_all(project.join("wb-1")).unwrap();
         fs::write(project.join("wb-1/sub.jsonl"), SESSION).unwrap();
-        let sessions = scan(&dir.path().join("projects"));
+        let sessions = scan(&dir.path().join("projects"), "workbuddy", None);
         assert_eq!(sessions.len(), 1);
         let meta = &sessions[0];
         assert_eq!(meta.provider_id, "workbuddy");

@@ -1674,7 +1674,10 @@
       "expandContent": "İçeriğin tamamını göster",
       "collapseContent": "Daralt"
     },
-    "copilotDeleteHint": "Oturum deposunun tutarlı kalması için bu oturumu GitHub Copilot CLI içinde silin"
+    "copilotDeleteHint": "Oturum deposunun tutarlı kalması için bu oturumu GitHub Copilot CLI içinde silin",
+    "codebuddyCnDeleteHint": "Oturum listesi ve geçmişin tutarlı kalması için bu oturumu CodeBuddy CN içinde silin",
+    "qoderDeleteHint": "Oturum listesi ve geçmişin tutarlı kalması için bu oturumu Qoder içinde silin",
+    "qoderCnDeleteHint": "Oturum listesi ve geçmişin tutarlı kalması için bu oturumu Qoder CN içinde silin"
   },
   "console": {
     "openLinkFailed": "Bağlantı açılamadı:",

@@ -127,7 +127,7 @@ objc2-app-kit = { version = "0.2", features = ["NSColor"] }
 objc2-06 = { package = "objc2", version = "0.6" }
 block2 = "0.6"
 objc2-foundation-03 = { package = "objc2-foundation", version = "0.3", default-features = false, features = ["std", "NSArray", "NSGeometry", "NSNotification", "NSOperation", "NSString", "block2"] }
-objc2-app-kit-03 = { package = "objc2-app-kit", version = "0.3", default-features = false, features = ["std", "NSAppearance", "NSGlassEffectView", "NSGraphics", "NSResponder", "NSScreen", "NSView", "NSVisualEffectView", "NSWindow"] }
+objc2-app-kit-03 = { package = "objc2-app-kit", version = "0.3", default-features = false, features = ["std", "NSAppearance", "NSApplication", "NSGlassEffectView", "NSGraphics", "NSImage", "NSResponder", "NSScreen", "NSView", "NSVisualEffectView", "NSWindow"] }
 
 # 本地 `cargo test` / `tauri dev` 和 CI 用同一份调试信息级别：只留行号表。
 # panic 和回溯照样有文件名与行号；完整调试信息（变量、类型）占测试二进制体积的九成，

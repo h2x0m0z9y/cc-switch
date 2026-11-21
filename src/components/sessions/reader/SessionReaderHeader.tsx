@@ -19,7 +19,7 @@ import {
   Download,
 } from "lucide-react";
 
-import { AppGlyph } from "@/components/shell/AppGlyph";
+import { SessionAppGlyph } from "../SessionAppGlyph";
 import { AppPageHeader } from "@/components/shell/AppPageHeader";
 import { Button } from "@/components/ui/button";
 import {
@@ -390,7 +390,7 @@ export const SessionReaderHeader = memo(function SessionReaderHeader({
       }
       icon={
         appId ? (
-          <AppGlyph app={appId} size={16} badgeClassName="bg-app" />
+          <SessionAppGlyph app={appId} size={16} badgeClassName="bg-app" />
         ) : undefined
       }
       title={
